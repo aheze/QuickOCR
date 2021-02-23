@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11134" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11134"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -673,7 +674,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="QuickOCR" customModuleProvider="target"/>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -703,11 +704,90 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="QuickOCR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="zgr-kq-9AF">
+                                <rect key="frame" x="160" y="92" width="160" height="118"/>
+                                <subviews>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pg8-G2-iVq">
+                                        <rect key="frame" x="0.0" y="0.0" width="160" height="90"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="49r-xd-rhO"/>
+                                    </imageView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="hVS-S3-9Tp" customClass="DropView" customModule="QuickOCR" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="160" height="90"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="160" id="4mz-TD-Mcz"/>
+                                            <constraint firstAttribute="height" constant="90" id="PX2-00-Z3V"/>
+                                        </constraints>
+                                    </customView>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NFD-MH-3vM">
+                                        <rect key="frame" x="19" y="102" width="123" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Drag an image here" id="vFM-UW-i2U">
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="hVS-S3-9Tp" secondAttribute="bottom" id="AUb-96-23D"/>
+                                    <constraint firstAttribute="trailing" secondItem="hVS-S3-9Tp" secondAttribute="trailing" id="Khg-Iq-83t"/>
+                                    <constraint firstItem="pg8-G2-iVq" firstAttribute="leading" secondItem="hVS-S3-9Tp" secondAttribute="leading" id="MoR-ch-HYb"/>
+                                    <constraint firstItem="NFD-MH-3vM" firstAttribute="centerX" secondItem="zgr-kq-9AF" secondAttribute="centerX" id="Vrk-5j-eij"/>
+                                    <constraint firstItem="hVS-S3-9Tp" firstAttribute="leading" secondItem="zgr-kq-9AF" secondAttribute="leading" id="Y0P-tY-eov"/>
+                                    <constraint firstItem="hVS-S3-9Tp" firstAttribute="bottom" secondItem="pg8-G2-iVq" secondAttribute="bottom" id="a6L-wO-MSa"/>
+                                    <constraint firstItem="hVS-S3-9Tp" firstAttribute="centerX" secondItem="zgr-kq-9AF" secondAttribute="centerX" id="eK9-kz-FwE"/>
+                                    <constraint firstItem="hVS-S3-9Tp" firstAttribute="top" secondItem="NFD-MH-3vM" secondAttribute="bottom" constant="12" id="mVa-4l-gvF"/>
+                                    <constraint firstItem="hVS-S3-9Tp" firstAttribute="trailing" secondItem="pg8-G2-iVq" secondAttribute="trailing" id="naD-if-U6N"/>
+                                    <constraint firstItem="NFD-MH-3vM" firstAttribute="top" secondItem="zgr-kq-9AF" secondAttribute="top" id="tzn-xl-Fdz"/>
+                                    <constraint firstItem="pg8-G2-iVq" firstAttribute="top" secondItem="hVS-S3-9Tp" secondAttribute="top" id="uAW-VR-ul2"/>
+                                </constraints>
+                            </customView>
+                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j3n-4k-Z3q">
+                                <rect key="frame" x="16" y="16" width="448" height="62"/>
+                                <clipView key="contentView" drawsBackground="NO" id="hkN-Wp-ERW">
+                                    <rect key="frame" x="0.0" y="0.0" width="433" height="62"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Y5X-r9-fMi">
+                                            <rect key="frame" x="0.0" y="0.0" width="433" height="62"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="minSize" width="433" height="62"/>
+                                            <size key="maxSize" width="435" height="10000000"/>
+                                            <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        </textView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="OoE-0M-RZk">
+                                    <rect key="frame" x="-100" y="-100" width="225" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="7AN-f2-S8Z">
+                                    <rect key="frame" x="433" y="0.0" width="15" height="62"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="j3n-4k-Z3q" secondAttribute="bottom" constant="16" id="3dc-s5-e2I"/>
+                            <constraint firstItem="zgr-kq-9AF" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="FFG-3R-wIK"/>
+                            <constraint firstItem="j3n-4k-Z3q" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="16" id="UNZ-tY-bjY"/>
+                            <constraint firstAttribute="trailing" secondItem="j3n-4k-Z3q" secondAttribute="trailing" constant="16" id="lx6-z8-MwH"/>
+                            <constraint firstItem="zgr-kq-9AF" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="60" id="nND-1c-o8s"/>
+                            <constraint firstItem="j3n-4k-Z3q" firstAttribute="top" secondItem="zgr-kq-9AF" secondAttribute="bottom" constant="14" id="xqy-Gf-Tgq"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="dropView" destination="hVS-S3-9Tp" id="VBN-CJ-ryv"/>
+                        <outlet property="imageView" destination="pg8-G2-iVq" id="2nC-1t-g49"/>
+                        <outlet property="scrollView" destination="j3n-4k-Z3q" id="rYN-T5-Mt7"/>
+                        <outlet property="textView" destination="Y5X-r9-fMi" id="TqR-5d-ZsQ"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
