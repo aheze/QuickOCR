@@ -12,7 +12,7 @@ class ViewController: NSViewController {
     @IBOutlet var imageView: NSImageView!
     
     @IBOutlet var textView: NSTextView!
-    @IBOutlet var scrollView: NSScrollView!
+    @IBOutlet weak var scrollView: NSScrollView!
     
     var currentCachingProcess: UUID?
     
@@ -23,10 +23,14 @@ class ViewController: NSViewController {
         
         dropView.layer?.cornerRadius = 6
         
-        dropView.returnImageURL = { [weak self] imageURL in
+        dropView.returnImageURL = { [weak self] (imageURL, nsImage) in
             guard let self = self else { return }
             
-            self.handleFileURLObject(imageURL)
+            if let url = imageURL {
+                self.handleFileURLObject(url)
+            } else if let image = nsImage {
+                self.processImage(image: image)
+            }
         }
     }
     
@@ -44,17 +48,15 @@ class ViewController: NSViewController {
     
     func handleFileURLObject(_ url: URL) {
         if let image = NSImage(contentsOfFile: url.path) {
-            print("Yes!")
-            
-            var imageRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
-            if let imageRef = image.cgImage(forProposedRect: &imageRect, context: nil, hints: nil) {
-                print("searching")
-                
-                imageView.image = image
-                search(in: imageRef)
-                
-                resize()
-            }
+                processImage(image: image)
+        }
+    }
+    func processImage(image: NSImage) {
+        var imageRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+        if let imageRef = image.cgImage(forProposedRect: &imageRect, context: nil, hints: nil) {
+            imageView.image = image
+            search(in: imageRef)
+            resize()
         }
     }
     
@@ -67,7 +69,6 @@ class ViewController: NSViewController {
         var newWidth = oldWidth
         var newHeight = CGFloat(400)
         if let custom = customSize {
-            print("yes")
             newWidth = custom.width
             newHeight = custom.height
         }
@@ -79,9 +80,9 @@ class ViewController: NSViewController {
 
 class DropView: NSView {
     var hasFilePath = false
-    let expectedExt = ["jpg", "jpeg", "png"] // file extensions allowed for Drag&Drop (example: "jpg","png","docx", etc..)
+    let expectedExt = ["jpg", "png"]
     
-    var returnImageURL: ((URL) -> Void)?
+    var returnImageURL: ((URL?, NSImage?) -> Void)?
     
     var inactiveColor = NSColor(calibratedRed: 0.3, green: 0.3, blue: 0.3, alpha: 0.3)
     var activeColor = NSColor(calibratedRed: 0, green: 0, blue: 0.8, alpha: 0.3)
@@ -113,9 +114,10 @@ class DropView: NSView {
         guard let board = drag.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
               let path = board[0] as? String
         else { return false }
-        
+
         let suffix = URL(fileURLWithPath: path).pathExtension
-        for ext in expectedExt {
+        
+        for ext in self.expectedExt {
             if ext.lowercased() == suffix {
                 return true
             }
@@ -124,7 +126,6 @@ class DropView: NSView {
     }
     
     override func draggingExited(_ sender: NSDraggingInfo?) {
-        print("exited")
         if hasFilePath {
             layer?.backgroundColor = NSColor.clear.cgColor
         } else {
@@ -133,7 +134,6 @@ class DropView: NSView {
     }
     
     override func draggingEnded(_ sender: NSDraggingInfo) {
-        print("ended")
         if hasFilePath {
             layer?.backgroundColor = NSColor.clear.cgColor
         } else {
@@ -142,17 +142,24 @@ class DropView: NSView {
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        
         guard let pasteboardObjects = sender.draggingPasteboard.readObjects(forClasses: [NSImage.self, NSColor.self, NSString.self, NSURL.self], options: nil), pasteboardObjects.count > 0 else {
             return false
         }
         
-        pasteboardObjects.forEach { object in
+        pasteboardObjects.forEach { (object) in
+            if let image = object as? NSImage {
+                print("Image dropped")
+                returnImageURL?(nil, image)
+                hasFilePath = true
+            }
+            
             if let url = object as? NSURL {
-                returnImageURL?(url as URL)
+                print("URL dropped")
+                returnImageURL?(url as URL, nil)
                 hasFilePath = true
             }
         }
-        
         return true
     }
 }
