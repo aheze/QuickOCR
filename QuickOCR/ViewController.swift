@@ -12,7 +12,7 @@ class ViewController: NSViewController {
     @IBOutlet var imageView: NSImageView!
     
     @IBOutlet var textView: NSTextView!
-    @IBOutlet weak var scrollView: NSScrollView!
+    @IBOutlet var scrollView: NSScrollView!
     
     var currentCachingProcess: UUID?
     
@@ -23,7 +23,7 @@ class ViewController: NSViewController {
         
         dropView.layer?.cornerRadius = 6
         
-        dropView.returnImageURL = { [weak self] (imageURL, nsImage) in
+        dropView.returnImageURL = { [weak self] imageURL, nsImage in
             guard let self = self else { return }
             
             if let url = imageURL {
@@ -48,9 +48,10 @@ class ViewController: NSViewController {
     
     func handleFileURLObject(_ url: URL) {
         if let image = NSImage(contentsOfFile: url.path) {
-                processImage(image: image)
+            processImage(image: image)
         }
     }
+
     func processImage(image: NSImage) {
         var imageRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
         if let imageRef = image.cgImage(forProposedRect: &imageRect, context: nil, hints: nil) {
@@ -64,7 +65,7 @@ class ViewController: NSViewController {
         var windowFrame = view.window?.frame ?? NSRect(x: 0, y: 0, width: 100, height: 100)
         
         let oldWidth = windowFrame.size.width
-        //let oldHeight = windowFrame.size.height
+        // let oldHeight = windowFrame.size.height
         
         var newWidth = oldWidth
         var newHeight = CGFloat(400)
@@ -80,7 +81,7 @@ class ViewController: NSViewController {
 
 class DropView: NSView {
     var hasFilePath = false
-    let expectedExt = ["jpg", "png"]
+    let expectedExt = ["jpg", "jpeg", "png"]
     
     var returnImageURL: ((URL?, NSImage?) -> Void)?
     
@@ -117,7 +118,7 @@ class DropView: NSView {
 
         let suffix = URL(fileURLWithPath: path).pathExtension
         
-        for ext in self.expectedExt {
+        for ext in expectedExt {
             if ext.lowercased() == suffix {
                 return true
             }
@@ -142,12 +143,11 @@ class DropView: NSView {
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-        
         guard let pasteboardObjects = sender.draggingPasteboard.readObjects(forClasses: [NSImage.self, NSColor.self, NSString.self, NSURL.self], options: nil), pasteboardObjects.count > 0 else {
             return false
         }
         
-        pasteboardObjects.forEach { (object) in
+        pasteboardObjects.forEach { object in
             if let image = object as? NSImage {
                 print("Image dropped")
                 returnImageURL?(nil, image)
