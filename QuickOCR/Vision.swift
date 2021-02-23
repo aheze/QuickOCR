@@ -8,16 +8,12 @@
 import Cocoa
 import Vision
 
-
 extension ViewController {
     func search(in cgImage: CGImage) {
-        
-        
         let thisProcessIdentifier = UUID()
         currentCachingProcess = thisProcessIdentifier
         
         DispatchQueue.global(qos: .userInitiated).async {
-            
             let request = VNRecognizeTextRequest { request, error in
                 self.handleCachedText(request: request, error: error, thisProcessIdentifier: thisProcessIdentifier)
             }
@@ -25,16 +21,14 @@ extension ViewController {
             request.recognitionLevel = .accurate
             request.recognitionLanguages = ["en_GB"]
             
-            
             let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage, orientation: .up)
             do {
                 try imageRequestHandler.perform([request])
-            } catch let error {
+            } catch {
                 self.currentCachingProcess = nil
                 print("Error: \(error)")
             }
         }
-
     }
     
     func handleCachedText(request: VNRequest?, error: Error?, thisProcessIdentifier: UUID) {
@@ -49,7 +43,6 @@ extension ViewController {
             return
         }
         
-        
         var string = ""
         for result in results {
             if let observation = result as? VNRecognizedTextObservation {
@@ -60,7 +53,6 @@ extension ViewController {
         }
         
         DispatchQueue.main.async {
-            
             self.textView.string = string
             
             NSAnimationContext.runAnimationGroup { context in
@@ -69,6 +61,5 @@ extension ViewController {
                 self.scrollView.animator().alphaValue = 1
             }
         }
-        
     }
 }
