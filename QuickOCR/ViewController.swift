@@ -8,13 +8,11 @@
 import Cocoa
 
 class ViewController: NSViewController {
-    
-    @IBOutlet weak var dropView: DropView!
-    @IBOutlet weak var imageView: NSImageView!
+    @IBOutlet var dropView: DropView!
+    @IBOutlet var imageView: NSImageView!
     
     @IBOutlet var textView: NSTextView!
-    @IBOutlet weak var scrollView: NSScrollView!
-    
+    @IBOutlet var scrollView: NSScrollView!
     
     var currentCachingProcess: UUID?
     
@@ -23,53 +21,40 @@ class ViewController: NSViewController {
         
         scrollView.alphaValue = 0
         
-        
         dropView.layer?.cornerRadius = 6
         
         dropView.returnImageURL = { [weak self] imageURL in
             guard let self = self else { return }
             
-            
             self.handleFileURLObject(imageURL)
-            
-            
         }
     }
     
     override func viewDidAppear() {
         super.viewDidAppear()
         
-        if let currentWindow = self.view.window {
-            
-            currentWindow.setFrame(NSRect(x: currentWindow.frame.origin.x, y: currentWindow.frame.origin.y, width: 400,height: 200), display: true)
+        if let currentWindow = view.window {
+            currentWindow.setFrame(NSRect(x: currentWindow.frame.origin.x, y: currentWindow.frame.origin.y, width: 400, height: 200), display: true)
         }
     }
     
     override var representedObject: Any? {
-        didSet {
-            
-        }
+        didSet {}
     }
     
     func handleFileURLObject(_ url: URL) {
         if let image = NSImage(contentsOfFile: url.path) {
             print("Yes!")
             
-            
             var imageRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
             if let imageRef = image.cgImage(forProposedRect: &imageRect, context: nil, hints: nil) {
-                
                 print("searching")
                 
                 imageView.image = image
                 search(in: imageRef)
                 
-                
-                
                 resize()
             }
-            
-            
         }
     }
     
@@ -77,8 +62,7 @@ class ViewController: NSViewController {
         var windowFrame = view.window?.frame ?? NSRect(x: 0, y: 0, width: 100, height: 100)
         
         let oldWidth = windowFrame.size.width
-        let oldHeight = windowFrame.size.height
-        
+        //let oldHeight = windowFrame.size.height
         
         var newWidth = oldWidth
         var newHeight = CGFloat(400)
@@ -94,22 +78,19 @@ class ViewController: NSViewController {
 }
 
 class DropView: NSView {
-    
     var hasFilePath = false
-    let expectedExt = ["jpg", "png"]  //file extensions allowed for Drag&Drop (example: "jpg","png","docx", etc..)
+    let expectedExt = ["jpg", "jpeg", "png"] // file extensions allowed for Drag&Drop (example: "jpg","png","docx", etc..)
     
     var returnImageURL: ((URL) -> Void)?
     
-    
     var inactiveColor = NSColor(calibratedRed: 0.3, green: 0.3, blue: 0.3, alpha: 0.3)
     var activeColor = NSColor(calibratedRed: 0, green: 0, blue: 0.8, alpha: 0.3)
-    
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
         self.wantsLayer = true
-        self.layer?.backgroundColor = inactiveColor.cgColor
+        layer?.backgroundColor = inactiveColor.cgColor
         
         registerForDraggedTypes([NSPasteboard.PasteboardType.URL, NSPasteboard.PasteboardType.fileURL])
     }
@@ -121,7 +102,7 @@ class DropView: NSView {
     
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         if checkExtension(sender) == true {
-            self.layer?.backgroundColor = activeColor.cgColor
+            layer?.backgroundColor = activeColor.cgColor
             return .copy
         } else {
             return NSDragOperation()
@@ -134,7 +115,7 @@ class DropView: NSView {
         else { return false }
         
         let suffix = URL(fileURLWithPath: path).pathExtension
-        for ext in self.expectedExt {
+        for ext in expectedExt {
             if ext.lowercased() == suffix {
                 return true
             }
@@ -145,20 +126,19 @@ class DropView: NSView {
     override func draggingExited(_ sender: NSDraggingInfo?) {
         print("exited")
         if hasFilePath {
-            self.layer?.backgroundColor = NSColor.clear.cgColor
+            layer?.backgroundColor = NSColor.clear.cgColor
         } else {
-            self.layer?.backgroundColor = inactiveColor.cgColor
+            layer?.backgroundColor = inactiveColor.cgColor
         }
     }
     
     override func draggingEnded(_ sender: NSDraggingInfo) {
         print("ended")
         if hasFilePath {
-            self.layer?.backgroundColor = NSColor.clear.cgColor
+            layer?.backgroundColor = NSColor.clear.cgColor
         } else {
-            self.layer?.backgroundColor = inactiveColor.cgColor
+            layer?.backgroundColor = inactiveColor.cgColor
         }
-        
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
@@ -166,7 +146,7 @@ class DropView: NSView {
             return false
         }
         
-        pasteboardObjects.forEach { (object) in
+        pasteboardObjects.forEach { object in
             if let url = object as? NSURL {
                 returnImageURL?(url as URL)
                 hasFilePath = true
