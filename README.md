@@ -4,6 +4,25 @@ Drag-and-drop to find text. A work in progress.
 ![](https://github.com/aheze/DeveloperAssets/blob/master/Screen%20Shot%202021-03-22%20at%204.13.45%20PM.png?raw=true) | ![](https://github.com/aheze/DeveloperAssets/blob/master/Screen%20Shot%202021-03-22%20at%204.14.38%20PM%20(2).png?raw=true) | ![](https://github.com/aheze/DeveloperAssets/blob/master/Screen%20Shot%202021-03-22%20at%204.14.45%20PM.png?raw=true)
 --- | --- | ---
 
+
+<table>
+<tr>
+<td>
+Input　　　　　　　　　　　　　　　　　　　　　　　　　　	
+</td>  
+<td>
+Output  
+</td> 
+</tr>  
+  
+<tr>
+<td>
+  
+![](https://github.com/aheze/DeveloperAssets/blob/master/Screen%20Shot%202021-03-22%20at%204.14.28%20PM.png?raw=true)
+
+</td>  
+<td>
+
 > © Blinky_X 2 hours ago %
 Sounds like a really good app with a lot of potential. Unfortunately, I won't be able to use it.
 Though well intentioned and appreciated for the work you put into making this app, you like
@@ -17,6 +36,10 @@ I didn't want to post this on your ratings cause I couldn't give it a high one d
 I've mentioned here. If in the future you resolve this problem, then I'll give a better rating.
 Peace.
 Reply Give Award Share Report Save
+
+</td>  
+</table>
+
 
 
 
