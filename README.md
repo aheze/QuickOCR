@@ -1,6 +1,8 @@
 # QuickOCR
 Drag-and-drop to find text. A work in progress.
 
+# [![Download ZIP](https://img.shields.io/badge/Download-ZIP-blue?style=for-the-badge)](https://github.com/aheze/QuickOCR/releases/download/v1.0.0/QuickOCR.zip)
+
 ![Window with drop target square in the middle](https://github.com/aheze/DeveloperAssets/blob/master/Screen%20Shot%202021-03-22%20at%204.13.45%20PM.png?raw=true) | ![Draggin and releasing an image into the square](https://github.com/aheze/DeveloperAssets/blob/master/Screen%20Shot%202021-03-22%20at%204.14.38%20PM%20(2).png?raw=true) | ![A text box with the detected text appears](https://github.com/aheze/DeveloperAssets/blob/master/Screen%20Shot%202021-03-22%20at%204.14.45%20PM.png?raw=true)
 --- | --- | ---
 
@@ -41,8 +43,3 @@ Reply Give Award Share Report Save
 
 </td>  
 </table>
-
-
-
-
-# [Download zip](https://github.com/aheze/QuickOCR/releases/download/v1.0.0/QuickOCR.zip)
